@@ -1,0 +1,40 @@
+{
+  "name": "entity-migrate",
+  "version": "1.0.4",
+  "type": "module",
+  "description": "Typescript package for defining and executing migrations for a specific entity, ensuring data consistency and type safety during version updates",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "lint": "eslint -- .",
+    "lint:fix": "eslint --fix -- . && prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "prepublish": "tsc",
+    "test": "jest",
+    "test-watch": "jest --watch"
+  },
+  "keywords": [
+    "migrate",
+    "migration",
+    "data",
+    "versioning",
+    "upgrade",
+    "transform",
+    "entity",
+    "typescript",
+    "type"
+  ],
+  "author": "Mohammad Matinaghdam <https://github.com/M-Matin-dev>",
+  "license": "MIT",
+  "repository": "https://github.com/M-Matin-dev/entity-migrate",
+  "devDependencies": {
+    "@types/jest": "^29.5.3",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.8.0",
+    "jest": "^29.6.1",
+    "prettier": "^3.0.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.1.6"
+  }
+}
