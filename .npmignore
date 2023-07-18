@@ -1,1 +1,10 @@
 .idea
+.examples
+src
+jest.config.js
+tsconfig.json
+*.test.*
+dist/examples
+.eslintignore
+.eslintrc.cjs
+.prettierrc
