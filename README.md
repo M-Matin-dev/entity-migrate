@@ -21,7 +21,7 @@ yarn add entity-migrate
 To use the Entity Migration Package in your project, import the `createEntityMigration` function from the package:
 
 ```typescript
-import { createEntityMigration } from 'entity-migration';
+import { createEntityMigration } from 'entity-migrate';
 ```
 
 ### Creating Entity Migration
@@ -111,12 +111,19 @@ const migrateV1toV2 = (data: TestEntityVersion1): TestEntityVersion2 => {
         fullName: data.name
     }
 }
-const addV1toV2Migration = () => addMigration({
-    sourceVersion: TestEntityVersionEnum.v1,
-    targetVersion: TestEntityVersionEnum.v2,
-    guard: isV1,
-    migrate: migrateV1toV2
-})
+
+const addV1toV2Migration = () =>
+    addMigration<
+        typeof TestEntityVersionEnum.v1,
+        typeof TestEntityVersionEnum.v2,
+        TestEntityVersion1,
+        TestEntityVersion2
+    >({
+        sourceVersion: TestEntityVersionEnum.v1,
+        targetVersion: TestEntityVersionEnum.v2,
+        guard: isV1,
+        migrate: migrateV1toV2
+    })
 
 // Define migration from V2 to V3
 const isV2 = (data: any): data is TestEntityVersion2 =>
@@ -131,12 +138,19 @@ const migrateV2toV3 = (data: TestEntityVersion2): TestEntityVersion3 => {
         lastName: parts.join(' ')
     }
 }
-const addV2toV3Migration = () => addMigration({
-    sourceVersion: TestEntityVersionEnum.v2,
-    targetVersion: TestEntityVersionEnum.v3,
-    guard: isV2,
-    migrate: migrateV2toV3
-})
+
+const addV2toV3Migration = () =>
+    addMigration<
+        typeof TestEntityVersionEnum.v2,
+        typeof TestEntityVersionEnum.v3,
+        TestEntityVersion2,
+        TestEntityVersion3
+    >({
+        sourceVersion: TestEntityVersionEnum.v2,
+        targetVersion: TestEntityVersionEnum.v3,
+        guard: isV2,
+        migrate: migrateV2toV3
+    })
 
 // Defining the data
 const testEntityVersion1: TestEntityVersion1 = {
@@ -154,7 +168,7 @@ internally the migrate function will migrate to v2:
     version: TestEntityVersionEnum.v2,
     fullName: 'John Smith'
 }
-and then to v3 because the resuling value has a migration to v2:
+and then to v3 because the resuling value has a migration from v2 to v3:
 {
     version: TestEntityVersionEnum.v3,
     firstName: 'John',

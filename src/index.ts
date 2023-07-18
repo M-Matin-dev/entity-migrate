@@ -1,20 +1,26 @@
+export type GuardFn<Type> = (data: any) => data is Type
+
 export interface Migration<
   SourceVersion extends string | number,
   TargetVersion extends string | number,
-  SourceType extends { version: SourceVersion },
-  TargetType extends { version: TargetVersion },
+  SourceType,
+  TargetType,
+  Guard = GuardFn<SourceType>,
+  Migrate = (data: SourceType) => TargetType,
 > {
   sourceVersion: SourceVersion
   targetVersion: TargetVersion
-  guard(data: any): data is SourceType
-  migrate(data: SourceType): TargetType
+  guard: Guard
+  migrate: Migrate
 }
 
 export function createEntityMigration<Versions extends string | number>(
   entityTag: string,
   allVersions: Versions[],
 ) {
-  type MigrationsMap = Partial<Record<Versions, Migration<any, any, any, any>>>
+  type MigrationsMap = Partial<
+    Record<Versions, Migration<any, any, any, any, any>>
+  >
 
   const userCollectionMigrations: MigrationsMap = {}
 
@@ -22,11 +28,11 @@ export function createEntityMigration<Versions extends string | number>(
     migrations: MigrationsMap,
     version: T,
   ) {
-    const isMigrationVersion = (version: any): version is Versions => {
+    let currentVersion = version
+    const isMigrationVersion = (v: any): v is Versions => {
       return currentVersion && currentVersion in migrations
     }
     const migratedFromVersion = new Set<Versions>()
-    let currentVersion = version
     while (isMigrationVersion(currentVersion)) {
       const { targetVersion } = migrations[currentVersion] || {}
       if (migratedFromVersion.has(currentVersion)) {
@@ -49,14 +55,21 @@ export function createEntityMigration<Versions extends string | number>(
     TargetVersion extends Versions,
     SourceType extends { version: SourceVersion },
     TargetType extends { version: TargetVersion },
-    Props extends Migration<
-      SourceVersion,
-      TargetVersion,
-      SourceType,
-      TargetType
-    >,
-  >(props: Props) {
-    userCollectionMigrations[props.sourceVersion] = props
+    Guard = GuardFn<SourceType>,
+    Migrate = (data: SourceType) => TargetType,
+  >(props: {
+    sourceVersion: SourceVersion
+    targetVersion: TargetVersion
+    guard: Guard
+    migrate: Migrate
+  }) {
+    userCollectionMigrations[props.sourceVersion] = props as Migration<
+      any,
+      any,
+      any,
+      any,
+      any
+    >
     throwIfInfiniteMigration(userCollectionMigrations)
   }
 

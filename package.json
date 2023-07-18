@@ -1,6 +1,6 @@
 {
   "name": "entity-migrate",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "description": "Typescript package for defining and executing migrations for a specific entity, ensuring data consistency and type safety during version updates",
   "main": "dist/index.js",
