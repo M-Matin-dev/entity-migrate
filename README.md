@@ -72,7 +72,7 @@ Here is an examples to help you understand the usage of the Entity Migration Pac
 
 ```typescript
 // Import the package
-import { createEntityMigration } from 'entity-migration';
+import { createEntityMigration } from 'entity-migrate';
 
 // different versions of the data
 const TestEntityVersionEnum = {
